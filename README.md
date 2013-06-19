@@ -1,5 +1,5 @@
-== CalaTK
-
+CalaTK
+==
 
 The CalaTK project develops innovative methods and tools for longitudinal atlases with a focus on neurodevelopment.  
 The computational toolbox is developed with the objective to analyze the neural developmental patterns observed in macaque structural and diffusion  on LDDMM, growth model LDDMM, LDDMM with geodesic shooting and/or initial momentum, or geometric metamorphostensor magnetic resonance (MR) images.
