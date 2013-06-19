@@ -115,6 +115,12 @@
             <description>Name of the target image. This is the actual target image used (including internal processing).</description>
         </image>
 
+  <string>
+    <name>sDetailedResultFilePrefix</name>
+    <label>Detailed result file prefix.</label>
+    <longflag>--detailedResultFilePrefix</longflag>
+    <default>detailedResult</default>
+  </string>
 	<file>
 	  <name>configFile</name>
 	  <longflag>--config</longflag>
@@ -170,5 +176,4 @@
         </integer-enumeration>
 
   </parameters>
-  
 </executable>

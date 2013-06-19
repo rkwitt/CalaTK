@@ -156,6 +156,9 @@ int DoIt( int argc, char** argv )
       }
     }
 
+
+  typename VectorFieldType::ConstPointer ptrMap0 = new VectorFieldType( plddmm->GetMap( 0.0 ) );
+  VectorImageUtilsType::writeFileITK( ptrMap0, sDetailedResultFilePrefix + "/map0.nrrd" );
   typename VectorFieldType::ConstPointer ptrMap1 = new VectorFieldType( plddmm->GetMap( 1.0 ) );
   VectorImageUtilsType::writeFileITK( ptrMap1, sourceToTargetMap );
 
