@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+
+  <category>Utilities.Registration</category>
+  <title>ImageReadWrite</title>
+  <description>Convert input image to output image.</description>
+  <version>1.0</version>
+  <documentation-url></documentation-url>
+  <license>Apache 2.0</license>
+  <contributor>The CALATK team</contributor>
+  <acknowledgements></acknowledgements>
+
+  <parameters>
+    <label>Input/Output</label>
+    <description>Input/Output Parameters</description>
+
+    <image>
+      <name>inputFilename</name>
+      <label>Input Image</label>
+      <channel>input</channel>
+      <index>0</index>
+      <description>Location of input image.</description>
+    </image>
+
+    <image>
+      <name>outputFilename</name>
+      <label>Output Image</label>
+      <channel>output</channel>
+      <index>1</index>
+      <description>Name of output image.</description>
+    </image>
+  </parameters>
+
+</executable>
