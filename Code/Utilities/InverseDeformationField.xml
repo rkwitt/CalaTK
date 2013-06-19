@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+
+  <category>Utilities.Registration</category>
+  <title>InverseDeformationField</title>
+  <description>Computes the inverse of the source to target map.</description>
+  <version>1.0</version>
+  <documentation-url></documentation-url>
+  <license>Apache 2.0</license>
+  <contributor>The CALATK team</contributor>
+  <acknowledgements></acknowledgements>
+
+  <parameters>
+    <label>Input/Output</label>
+    <description>Input/Output Parameters</description>
+
+    <image>
+      <name>sourceToTargetMap</name>
+      <label>Source to target map</label>
+      <channel>input</channel>
+      <index>0</index>
+      <description>Registration map from source to target in target space.</description>
+    </image>
+
+    <image>
+      <name>targetToSourceMap</name>
+      <label>Inverse Map</label>
+      <channel>output</channel>
+      <index>1</index>
+      <description>Computed inverse map.</description>
+    </image>
+  </parameters>
+
+</executable>
