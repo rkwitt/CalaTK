@@ -44,15 +44,18 @@
 #include <itkImageFileWriter.h>
 #include <itkImage.h>
 #include <itkVector.h>
+#include <itkWarpImageFilter.h>
 // Software Guide : EndCodeSnippet
 
-#include "ImageReadWriteCLP.h"
+#include "WarpImageCLP.h"
 
 const unsigned int VImageDimension = 2;
 
 template < unsigned int VImageDimension >
-void DoIt( const std::string &inputFilename, const std::string &outputFilename )
+int DoIt( int argc, char **argv )
 {
+    PARSE_ARGS;
+
     typedef itk::Vector<float,VImageDimension> PixelType;
     //  Software Guide : BeginLatex
     //
@@ -79,6 +82,7 @@ void DoIt( const std::string &inputFilename, const std::string &outputFilename )
 
     // Software Guide : BeginCodeSnippet
     typedef itk::Image< PixelType, VImageDimension >    ImageType;
+    typedef itk::Image< float, VImageDimension >    ImageScalarType;
     // Software Guide : EndCodeSnippet
 
 
@@ -98,8 +102,9 @@ void DoIt( const std::string &inputFilename, const std::string &outputFilename )
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
-    typedef itk::ImageFileReader< ImageType >  ReaderType;
-    typedef itk::ImageFileWriter< ImageType >  WriterType;
+    typedef itk::ImageFileReader< ImageType >  Reader3DType;
+    typedef itk::ImageFileReader< ImageScalarType >  ReaderType;
+    typedef itk::ImageFileWriter< ImageScalarType >  WriterType;
     // Software Guide : EndCodeSnippet
 
 
@@ -116,6 +121,7 @@ void DoIt( const std::string &inputFilename, const std::string &outputFilename )
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
+    typename Reader3DType::Pointer reader3D = Reader3DType::New();
     typename ReaderType::Pointer reader = ReaderType::New();
     typename WriterType::Pointer writer = WriterType::New();
     // Software Guide : EndCodeSnippet
@@ -133,7 +139,8 @@ void DoIt( const std::string &inputFilename, const std::string &outputFilename )
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
-    reader->SetFileName( inputFilename );
+    reader3D->SetFileName( sourceToTargetMap  );
+    reader->SetFileName( inputFilename  );
     writer->SetFileName( outputFilename );
     writer->UseCompressionOn();
     // Software Guide : EndCodeSnippet
@@ -146,8 +153,14 @@ void DoIt( const std::string &inputFilename, const std::string &outputFilename )
     //
     //  Software Guide : EndLatex
 
+
+    typedef typename itk::WarpImageFilter<ImageScalarType,ImageScalarType,ImageType> WarpingFilterType;
+    typename WarpingFilterType::Pointer warpingFilter = WarpingFilterType::New();
+    warpingFilter->SetDisplacementField(reader3D->GetOutput());
+    warpingFilter->SetInput(reader->GetOutput());
+
     // Software Guide : BeginCodeSnippet
-    writer->SetInput( reader->GetOutput() );
+    writer->SetInput( warpingFilter->GetOutput() );
     // Software Guide : EndCodeSnippet
 
 
@@ -171,6 +184,7 @@ void DoIt( const std::string &inputFilename, const std::string &outputFilename )
     {
         std::cerr << "ExceptionObject caught !" << std::endl;
         std::cerr << err << std::endl;
+        return EXIT_FAILURE;
     }
     // Software Guide : EndCodeSnippet
 
@@ -200,12 +214,14 @@ void DoIt( const std::string &inputFilename, const std::string &outputFilename )
     //  \code{Update()} is recommended since Write() may be deprecated in the future.
     //
     //  Software Guide : EndLatex
+    return EXIT_SUCCESS;
 }
 
 
 template<>
-void DoIt<4>( const std::string &inputFilename, const std::string &outputFilename )
+int DoIt<4>( int argc, char **argv )
 {
+    PARSE_ARGS;
 
     typedef float PixelType;
     //  Software Guide : BeginLatex
@@ -233,7 +249,8 @@ void DoIt<4>( const std::string &inputFilename, const std::string &outputFilenam
 
     // Software Guide : BeginCodeSnippet
     typedef itk::Image< PixelType, 4 >                    ImageType;
-    typedef itk::Image< itk::Vector<PixelType,3>, 3 >     ImageType3D;
+    typedef itk::Image< PixelType, 3 >                    ImageScalarType;
+    typedef itk::Image< itk::Vector<PixelType,3>, 3 >     Image3DType;
     typedef itk::ImageRegionIteratorWithIndex<ImageType>  IteratorType;
     // Software Guide : EndCodeSnippet
 
@@ -254,8 +271,9 @@ void DoIt<4>( const std::string &inputFilename, const std::string &outputFilenam
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
-    typedef itk::ImageFileReader< ImageType >     ReaderType;
-    typedef itk::ImageFileWriter< ImageType3D >   WriterType;
+    typedef itk::ImageFileReader< ImageScalarType >       ReaderType;
+    typedef itk::ImageFileWriter< ImageScalarType > WriterType;
+    typedef itk::ImageFileReader< ImageType >     Reader4DType;
     // Software Guide : EndCodeSnippet
 
 
@@ -273,7 +291,9 @@ void DoIt<4>( const std::string &inputFilename, const std::string &outputFilenam
 
     // Software Guide : BeginCodeSnippet
     typename ReaderType::Pointer reader = ReaderType::New();
+    typename Reader4DType::Pointer reader4D = Reader4DType::New();
     typename WriterType::Pointer writer = WriterType::New();
+
     // Software Guide : EndCodeSnippet
 
     //  Software Guide : BeginLatex
@@ -289,9 +309,10 @@ void DoIt<4>( const std::string &inputFilename, const std::string &outputFilenam
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
-    reader->SetFileName( inputFilename);
-    writer->SetFileName( outputFilename);
+    reader->SetFileName( inputFilename  );
+    writer->SetFileName( outputFilename );
     writer->UseCompressionOn();
+    reader4D->SetFileName( sourceToTargetMap );
     // Software Guide : EndCodeSnippet
 
 
@@ -309,9 +330,10 @@ void DoIt<4>( const std::string &inputFilename, const std::string &outputFilenam
 
     // Update meta info and allocate space for new image
     reader->Update();
+    reader4D->Update();
 
-    typename ImageType::Pointer input = reader->GetOutput();
-    typename ImageType3D::Pointer output = ImageType3D::New();
+    typename ImageType::Pointer input = reader4D->GetOutput();
+    typename Image3DType::Pointer output = Image3DType::New();
 
     std::cout << "Size = "    << input->GetLargestPossibleRegion().GetSize() << std::endl;
     std::cout << "Index = "   << input->GetLargestPossibleRegion().GetIndex() << std::endl;
@@ -323,11 +345,11 @@ void DoIt<4>( const std::string &inputFilename, const std::string &outputFilenam
     typename ImageType::SpacingType inputSpacing = input->GetSpacing();
     typename ImageType::PointType inputOrigin = input->GetOrigin();
 
-    typename ImageType3D::SizeType    outputSize;
-    typename ImageType3D::IndexType   outputIndex;
-    typename ImageType3D::SpacingType outputSpacing;
-    typename ImageType3D::PointType   outputOrigin;
-    typename ImageType3D::RegionType  outputRegion;
+    typename Image3DType::SizeType    outputSize;
+    typename Image3DType::IndexType   outputIndex;
+    typename Image3DType::SpacingType outputSpacing;
+    typename Image3DType::PointType   outputOrigin;
+    typename Image3DType::RegionType  outputRegion;
 
     outputSize[0] = inputSize[0];
     outputSize[1] = inputSize[1];
@@ -358,16 +380,24 @@ void DoIt<4>( const std::string &inputFilename, const std::string &outputFilenam
     for(inputIt.GoToBegin(); !inputIt.IsAtEnd(); ++inputIt)
     {
         typename ImageType::IndexType   inputIdx = inputIt.GetIndex();
-        typename ImageType3D::IndexType outputIdx;
+        typename Image3DType::IndexType outputIdx;
         outputIdx[0] = inputIdx[0];
         outputIdx[1] = inputIdx[1];
         outputIdx[2] = inputIdx[2];
 
-        typename ImageType3D::PixelType &pixel = output->GetPixel(outputIdx);
+        typename Image3DType::PixelType &pixel = output->GetPixel(outputIdx);
 
         pixel[inputIdx[3]] = inputIt.Get();
     }
 
+    // Apply field to input image
+    typedef typename itk::WarpImageFilter<ImageScalarType,ImageScalarType,Image3DType> WarpingFilterType;
+    typename WarpingFilterType::Pointer warpingFilter = WarpingFilterType::New();
+
+    warpingFilter->SetDisplacementField(output);
+    warpingFilter->SetInput(reader->GetOutput());
+    warpingFilter->SetOutputSpacing(reader->GetOutput()->GetSpacing());
+    warpingFilter->SetOutputOrigin(reader->GetOutput()->GetOrigin());
     //  Software Guide : BeginLatex
     //
     //  We can now connect these readers and writers to filters to create a
@@ -377,7 +407,7 @@ void DoIt<4>( const std::string &inputFilename, const std::string &outputFilenam
     //  Software Guide : EndLatex
 
     // Software Guide : BeginCodeSnippet
-    writer->SetInput( output );
+    writer->SetInput( warpingFilter->GetOutput() );
     // Software Guide : EndCodeSnippet
 
 
@@ -390,6 +420,7 @@ void DoIt<4>( const std::string &inputFilename, const std::string &outputFilenam
     {
         std::cerr << "ExceptionObject caught !" << std::endl;
         std::cerr << err << std::endl;
+        return EXIT_FAILURE;
     }
     // Software Guide : EndCodeSnippet
 
@@ -419,6 +450,7 @@ void DoIt<4>( const std::string &inputFilename, const std::string &outputFilenam
     //  \code{Update()} is recommended since Write() may be deprecated in the future.
     //
     //  Software Guide : EndLatex
+    return EXIT_SUCCESS;
 }
 
 
@@ -426,29 +458,21 @@ int main( int argc, char ** argv )
 {
     PARSE_ARGS;
 
-    if(inputFilename.size() != outputFilename.size())
+    unsigned int uiSourceImageDimension = CALATK::GetNonSingletonImageDimensionFromFile( sourceToTargetMap );
+    switch ( uiSourceImageDimension )
     {
-      std::cerr << "Input files do not match output names." << std::endl;
-      return EXIT_FAILURE;
+    case 2:
+        return DoIt<2>( argc, argv );
+        break;
+    case 3:
+        return DoIt<3>( argc, argv );
+        break;
+    case 4:
+        return DoIt<4>( argc, argv );
+        break;
+    default:
+        std::cerr << "Unsupported image dimension = " << uiSourceImageDimension << std::endl;
     }
 
-    for(size_t i = 0, end = inputFilename.size(); i != end; ++i)
-    {
-      unsigned int uiSourceImageDimension = CALATK::GetNonSingletonImageDimensionFromFile( inputFilename[i] );
-      switch ( uiSourceImageDimension )
-      {
-      case 2:
-          DoIt<2>( inputFilename[i], outputFilename[i] );
-          break;
-      case 3:
-          DoIt<3>( inputFilename[i], outputFilename[i] );
-          break;
-      case 4:
-          DoIt<4>( inputFilename[i], outputFilename[i] );
-          break;
-      default:
-          std::cerr << "Unsupported image dimension = " << uiSourceImageDimension << std::endl;
-      }
-    }
-    return EXIT_SUCCESS;
+    return EXIT_FAILURE;
 }

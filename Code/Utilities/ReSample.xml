@@ -2,21 +2,30 @@
 <executable>
 
   <category>Utilities.Registration</category>
-  <title>ImageReadWrite</title>
-  <description>Convert input image to output image.</description>
+  <title>Resample Image</title>
+  <description>Resample image</description>
   <version>1.0</version>
   <documentation-url></documentation-url>
   <license>Apache 2.0</license>
   <contributor>The CALATK team</contributor>
   <acknowledgements></acknowledgements>
-
+  <parameters>
+    <label>Computational settings</label>
+    <description>Adjusts main settings for the computation</description>
+    <float>
+      <name>factor</name>
+      <label>Resampling factor.</label>
+      <longflag>--factor</longflag>
+      <default>2.0</default>
+    </float>
+  </parameters>
   <parameters>
     <label>Input/Output</label>
     <description>Input/Output Parameters</description>
 
     <image multiple="true">
       <name>inputFilename</name>
-      <label>Input Image</label>
+      <label>Input Image(s)</label>
       <channel>input</channel>
       <longflag>--input</longflag>
       <description>Location of input image(s).</description>
@@ -27,7 +36,7 @@
       <label>Output Image</label>
       <channel>output</channel>
       <longflag>--output</longflag>
-      <description>Name of output image(s).</description>
+      <description>Name of output image.</description>
     </image>
   </parameters>
 

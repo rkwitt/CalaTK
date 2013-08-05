@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+
+  <category>Utilities.Registration</category>
+  <title>Compute mask differences</title>
+  <description>Create mask by composing images</description>
+  <version>1.0</version>
+  <documentation-url></documentation-url>
+  <license>Apache 2.0</license>
+  <contributor>The CALATK team</contributor>
+  <acknowledgements></acknowledgements>
+  <parameters>
+    <label>Computational settings</label>
+    <description>Adjusts main settings for the computation</description>
+    <integer>
+      <name>radius</name>
+      <label>Neigborhood Radius</label>
+      <longflag>--radius</longflag>
+      <default>2</default>
+    </integer>
+    <integer>
+      <name>dilateValue</name>
+      <label>Dilate Value</label>
+      <longflag>--dilateValue</longflag>
+      <description>Value over which the dilation rule will apply.</description>
+      <default>1</default>
+    </integer>
+  </parameters>
+  <parameters>
+    <label>Input/Output</label>
+    <description>Input/Output Parameters</description>
+
+    <image>
+      <name>inputBgFieldFilename</name>
+      <label>Input Background Velocity Field</label>
+      <channel>input</channel>
+      <index>0</index>
+      <description>Location displacement field.</description>
+    </image>
+
+    <image>
+      <name>inputFilenameI0</name>
+      <label>Input Image</label>
+      <channel>input</channel>
+      <index>1</index>
+      <description>Location of source image.</description>
+    </image>
+
+    <image>
+      <name>inputFilenameI1</name>
+      <label>Input Image</label>
+      <channel>input</channel>
+      <index>2</index>
+      <description>Location of target image.</description>
+    </image>
+
+    <image>
+      <name>inputFilenameM0</name>
+      <label>Input Image</label>
+      <channel>input</channel>
+      <index>3</index>
+      <description>Location of source mask.</description>
+    </image>
+
+    <image>
+      <name>inputFilenameM1</name>
+      <label>Input Image</label>
+      <channel>input</channel>
+      <index>4</index>
+      <description>Location of target mask.</description>
+    </image>
+
+    <image>
+      <name>outputFilename</name>
+      <label>Output Image</label>
+      <channel>output</channel>
+      <index>5</index>
+      <description>Name of output image.</description>
+    </image>
+  </parameters>
+
+</executable>

@@ -2,8 +2,8 @@
 <executable>
 
   <category>Utilities.Registration</category>
-  <title>InverseDeformationField</title>
-  <description>Computes the inverse of the source to target map.</description>
+  <title>ComputeDisplacementFieldFromMap</title>
+  <description>Compute displacement fields from maps.</description>
   <version>1.0</version>
   <documentation-url></documentation-url>
   <license>Apache 2.0</license>
@@ -14,20 +14,20 @@
     <label>Input/Output</label>
     <description>Input/Output Parameters</description>
 
-    <image>
+    <image multiple="true">
       <name>inputFilename</name>
-      <label>Source to target map</label>
+      <label>Input Image</label>
       <channel>input</channel>
-      <index>0</index>
-      <description>Registration map from source to target in target space.</description>
+      <longflag>--input</longflag>
+      <description>Location of input image(s).</description>
     </image>
 
-    <image>
+    <image multiple="true">
       <name>outputFilename</name>
-      <label>Inverse Map</label>
+      <label>Output Image</label>
       <channel>output</channel>
-      <index>1</index>
-      <description>Computed inverse map.</description>
+      <longflag>--output</longflag>
+      <description>Name of output image(s).</description>
     </image>
   </parameters>
 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+
+  <category>Utilities.Registration</category>
+  <title>Create Mask</title>
+  <description>Create mask by composing images</description>
+  <version>1.0</version>
+  <documentation-url></documentation-url>
+  <license>Apache 2.0</license>
+  <contributor>The CALATK team</contributor>
+  <acknowledgements></acknowledgements>
+  <parameters>
+    <label>Computational settings</label>
+    <description>Adjusts main settings for the computation</description>
+    <float>
+      <name>thresholdParameter</name>
+      <label>Lower threshold.</label>
+      <longflag>--lowThreshold</longflag>
+      <default>.2</default>
+    </float>
+    <boolean>
+      <name>addImages</name>
+      <label>Add images.</label>
+      <longflag>--addImages</longflag>
+      <default>false</default>
+    </boolean>
+  </parameters>
+  <parameters>
+    <label>Input/Output</label>
+    <description>Input/Output Parameters</description>
+
+    <image>
+      <name>inputFilename1</name>
+      <label>Input Image</label>
+      <channel>input</channel>
+      <index>0</index>
+      <description>Location of input image.</description>
+    </image>
+
+    <image>
+      <name>inputFilename2</name>
+      <label>Input Image</label>
+      <channel>input</channel>
+      <index>1</index>
+      <description>Location of input image.</description>
+    </image>
+
+    <image>
+      <name>outputFilename</name>
+      <label>Output Image</label>
+      <channel>output</channel>
+      <index>2</index>
+      <description>Name of output image.</description>
+    </image>
+  </parameters>
+
+</executable>
